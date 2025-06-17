@@ -2,9 +2,12 @@ console.log("Background service worker started.");
 
 // Create context menu for images on installation
 chrome.runtime.onInstalled.addListener(() => {
+  // Ensure messages are loaded before creating menu items, especially if background script is non-persistent
+  // However, for onInstalled, this should be fine as it runs once.
+  const title = chrome.i18n.getMessage("clipImageContextMenuLabel") || "Clip Image"; // Fallback if i18n fails early
   chrome.contextMenus.create({
     id: "clipImageContextMenu",
-    title: "Clip Image",
+    title: title,
     contexts: ["image"]
   }, () => {
     if (chrome.runtime.lastError) {

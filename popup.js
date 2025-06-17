@@ -1,20 +1,36 @@
 console.log("Popup script loaded.");
 
 document.addEventListener('DOMContentLoaded', function() {
-  const toggleButton = document.getElementById('toggleEditModeButton');
-  if (toggleButton) {
-    toggleButton.addEventListener('click', function() {
+  // Localize button texts
+  const toggleEditModeButton = document.getElementById('toggleEditModeButton');
+  if (toggleEditModeButton) {
+    toggleEditModeButton.textContent = chrome.i18n.getMessage('toggleEditModeButtonText');
+  }
+
+  const toggleSidebarButton = document.getElementById('toggleSidebarButton');
+  if (toggleSidebarButton) {
+    toggleSidebarButton.textContent = chrome.i18n.getMessage('toggleSidebarButtonText');
+  }
+
+  const clipSelectionButton = document.getElementById('clipSelectionButton');
+  if (clipSelectionButton) {
+    clipSelectionButton.textContent = chrome.i18n.getMessage('clipSelectionButtonText');
+  }
+
+  // Event Listeners
+  if (toggleEditModeButton) {
+    toggleEditModeButton.addEventListener('click', function() {
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         if (tabs.length > 0) {
           chrome.tabs.sendMessage(tabs[0].id, {action: "toggleEdit"}, function(response) {
             if (chrome.runtime.lastError) {
-              console.error("Error sending message:", chrome.runtime.lastError.message);
+              console.error("Error sending toggleEdit message:", chrome.runtime.lastError.message);
             } else {
-              console.log("Message sent, response:", response);
+              console.log("toggleEdit message sent, response:", response);
             }
           });
         } else {
-          console.error("No active tab found.");
+          console.error("No active tab found for toggleEdit.");
         }
       });
     });
@@ -22,20 +38,19 @@ document.addEventListener('DOMContentLoaded', function() {
     console.error("Button with ID 'toggleEditModeButton' not found.");
   }
 
-  const toggleSidebarBtn = document.getElementById('toggleSidebarButton');
-  if (toggleSidebarBtn) {
-    toggleSidebarBtn.addEventListener('click', function() {
+  if (toggleSidebarButton) {
+    toggleSidebarButton.addEventListener('click', function() {
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         if (tabs.length > 0) {
           chrome.tabs.sendMessage(tabs[0].id, {action: "toggleSidebar"}, function(response) {
             if (chrome.runtime.lastError) {
-              console.error("Error sending message to toggle sidebar:", chrome.runtime.lastError.message);
+              console.error("Error sending toggleSidebar message:", chrome.runtime.lastError.message);
             } else {
-              console.log("Sidebar toggle message sent, response:", response);
+              console.log("toggleSidebar message sent, response:", response);
             }
           });
         } else {
-          console.error("No active tab found for sidebar toggle.");
+          console.error("No active tab found for toggleSidebar.");
         }
       });
     });
@@ -43,20 +58,19 @@ document.addEventListener('DOMContentLoaded', function() {
     console.error("Button with ID 'toggleSidebarButton' not found.");
   }
 
-  const clipSelectionBtn = document.getElementById('clipSelectionButton');
-  if (clipSelectionBtn) {
-    clipSelectionBtn.addEventListener('click', function() {
+  if (clipSelectionButton) {
+    clipSelectionButton.addEventListener('click', function() {
       chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
         if (tabs.length > 0) {
           chrome.tabs.sendMessage(tabs[0].id, {action: "clipSelection"}, function(response) {
             if (chrome.runtime.lastError) {
-              console.error("Error sending clip selection message:", chrome.runtime.lastError.message);
+              console.error("Error sending clipSelection message:", chrome.runtime.lastError.message);
             } else {
-              console.log("Clip selection message sent, response:", response);
+              console.log("clipSelection message sent, response:", response);
             }
           });
         } else {
-          console.error("No active tab found for clip selection.");
+          console.error("No active tab found for clipSelection.");
         }
       });
     });

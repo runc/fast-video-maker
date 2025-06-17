@@ -1,0 +1,146 @@
+{
+  "extensionName": {
+    "message": "Web Clipper Pro",
+    "description": "The name of the extension."
+  },
+  "extensionDescription": {
+    "message": "A browser extension to clip web content, organize materials, and create simple video sequences.",
+    "description": "A short description of the extension."
+  },
+  "toggleEditModeButtonText": {
+    "message": "Toggle Edit Mode",
+    "description": "Text for the button that toggles page editing mode."
+  },
+  "toggleSidebarButtonText": {
+    "message": "Toggle Sidebar",
+    "description": "Text for the button that shows/hides the sidebar."
+  },
+  "clipSelectionButtonText": {
+    "message": "Clip Selected Text",
+    "description": "Text for the button that clips the selected text on the page."
+  },
+  "sidebarHeader": {
+    "message": "Web Clipper Pro",
+    "description": "Main header for the sidebar, often same as extension name."
+  },
+  "closeButtonText": {
+    "message": "Close",
+    "description": "Text for the close button inside the sidebar."
+  },
+  "clipsTabButtonText": {
+    "message": "Clips",
+    "description": "Text for the 'Clips' tab button in the sidebar."
+  },
+  "editorTabButtonText": {
+    "message": "Editor",
+    "description": "Text for the 'Editor' tab button in the sidebar."
+  },
+  "clipsViewHeader": {
+    "message": "Clipped Content",
+    "description": "Header for the area displaying saved clips."
+  },
+  "mediaBinHeader": {
+    "message": "Media Bin",
+    "description": "Header for the media bin in the editor tab."
+  },
+  "timelineHeader": {
+    "message": "Timeline",
+    "description": "Header for the timeline area in the editor tab."
+  },
+  "saveTimelineButtonText": {
+    "message": "Save Timeline",
+    "description": "Text for the button to save the current timeline."
+  },
+  "aiVideoIntentPlaceholder": {
+    "message": "Optional: Video theme or style (e.g., funny, educational)",
+    "description": "Placeholder text for the AI video intent input field."
+  },
+  "sendToAiButtonText": {
+    "message": "Generate Video with AI",
+    "description": "Text for the button to trigger AI video generation."
+  },
+  "statusTextClipped": {
+    "message": "Text clipped!",
+    "description": "Status message shown when text is successfully clipped."
+  },
+  "statusImageClipped": {
+    "message": "Image clipped!",
+    "description": "Status message shown when an image is successfully clipped."
+  },
+  "statusNoTextSelected": {
+    "message": "No text selected to clip.",
+    "description": "Status message shown when trying to clip text but none is selected."
+  },
+  "statusNoImageUrl": {
+      "message": "No image URL provided for clipping.",
+      "description": "Status message if image URL is missing for clipping."
+  },
+  "statusTimelineSaved": {
+    "message": "Timeline saved!",
+    "description": "Status message shown when the timeline is successfully saved."
+  },
+  "statusAiPayloadLogged": {
+    "message": "AI payload logged to console.",
+    "description": "Status message shown when the AI payload is prepared and logged."
+  },
+  "statusTimelineEmpty": {
+    "message": "Timeline is empty. Add some clips!",
+    "description": "Status message shown when trying to use an empty timeline."
+  },
+  "statusErrorLoadingClips": {
+    "message": "Error loading clips.",
+    "description": "Status message shown if there's an error loading clips from storage."
+  },
+  "statusErrorSavingClip": {
+    "message": "Error saving clip.",
+    "description": "Status message shown if there's an error saving a single clip."
+  },
+  "statusErrorDeletingClip": {
+    "message": "Error deleting clip.",
+    "description": "Status message shown if there's an error deleting a clip."
+  },
+  "statusErrorLoadingTimeline": {
+    "message": "Error loading timeline.",
+    "description": "Status message shown if there's an error loading the timeline from storage."
+  },
+  "statusErrorSavingTimeline": {
+    "message": "Error saving timeline.",
+    "description": "Status message shown if there's an error saving the timeline to storage."
+  },
+  "statusErrorLoadingMediaBin": {
+    "message": "Error loading media bin.",
+    "description": "Status message for error loading media bin items."
+  },
+  "clipImageContextMenuLabel": {
+    "message": "Clip Image",
+    "description": "Text for the context menu item to clip an image."
+  },
+  "noClipsYetMessage": {
+    "message": "No clips yet. Select text or right-click an image to clip!",
+    "description": "Message shown in the clips view when no clips are saved."
+  },
+  "mediaBinEmptyMessage": {
+    "message": "Media bin empty. Add clips from the 'Clips' tab or by clipping new content.",
+    "description": "Message shown in media bin when empty."
+  },
+  "timelineEmptyMessage": {
+    "message": "Timeline is empty. Drag items from Media Bin.",
+    "description": "Message shown in timeline when empty."
+  },
+  "deleteButtonSymbol": {
+    "message": "X",
+    "description": "Symbol or text for delete buttons. 'X' is common."
+  },
+  "timelineItemDurationSuffix": {
+    "message": "s",
+    "description": "Suffix for duration input, e.g., '5 s' for 5 seconds."
+  },
+  "statusClipDeleted": {
+    "message": "Clip deleted.",
+    "description": "Status message shown when a clip is successfully deleted."
+  },
+  "popupTitle": {
+    "message": "Extension Controls",
+    "description": "Title for the browser action popup."
+  }
+}

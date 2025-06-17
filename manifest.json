@@ -1,11 +1,12 @@
 {
   "manifest_version": 3,
-  "name": "Web Clipper Pro",
+  "name": "__MSG_extensionName__",
   "version": "1.0.0",
-  "description": "A browser extension to clip web content, organize materials, and create simple video sequences.",
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "en",
   "permissions": ["activeTab", "storage", "scripting", "contextMenus"],
   "action": {
-    "default_title": "Clip Content",
+    "default_title": "__MSG_extensionName__",
     "default_popup": "popup.html"
   },
   "background": {

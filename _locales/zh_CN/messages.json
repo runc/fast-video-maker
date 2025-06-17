@@ -1,0 +1,146 @@
+{
+  "extensionName": {
+    "message": "网页剪辑助手专业版",
+    "description": "The name of the extension."
+  },
+  "extensionDescription": {
+    "message": "一个浏览器插件，用于剪辑网页内容、整理素材并创建简单的视频序列。",
+    "description": "A short description of the extension."
+  },
+  "toggleEditModeButtonText": {
+    "message": "切换编辑模式",
+    "description": "Text for the button that toggles page editing mode."
+  },
+  "toggleSidebarButtonText": {
+    "message": "切换侧边栏",
+    "description": "Text for the button that shows/hides the sidebar."
+  },
+  "clipSelectionButtonText": {
+    "message": "剪辑选中文本",
+    "description": "Text for the button that clips the selected text on the page."
+  },
+  "sidebarHeader": {
+    "message": "网页剪辑助手专业版",
+    "description": "Main header for the sidebar, often same as extension name."
+  },
+  "closeButtonText": {
+    "message": "关闭",
+    "description": "Text for the close button inside the sidebar."
+  },
+  "clipsTabButtonText": {
+    "message": "剪辑列表",
+    "description": "Text for the 'Clips' tab button in the sidebar."
+  },
+  "editorTabButtonText": {
+    "message": "编辑器",
+    "description": "Text for the 'Editor' tab button in the sidebar."
+  },
+  "clipsViewHeader": {
+    "message": "已剪辑内容",
+    "description": "Header for the area displaying saved clips."
+  },
+  "mediaBinHeader": {
+    "message": "素材库",
+    "description": "Header for the media bin in the editor tab."
+  },
+  "timelineHeader": {
+    "message": "时间轴",
+    "description": "Header for the timeline area in the editor tab."
+  },
+  "saveTimelineButtonText": {
+    "message": "保存时间轴",
+    "description": "Text for the button to save the current timeline."
+  },
+  "aiVideoIntentPlaceholder": {
+    "message": "可选：视频主题或风格（例如：搞笑、教育）",
+    "description": "Placeholder text for the AI video intent input field."
+  },
+  "sendToAiButtonText": {
+    "message": "使用AI生成视频",
+    "description": "Text for the button to trigger AI video generation."
+  },
+  "statusTextClipped": {
+    "message": "文本已剪辑！",
+    "description": "Status message shown when text is successfully clipped."
+  },
+  "statusImageClipped": {
+    "message": "图片已剪辑！",
+    "description": "Status message shown when an image is successfully clipped."
+  },
+  "statusNoTextSelected": {
+    "message": "未选择要剪辑的文本。",
+    "description": "Status message shown when trying to clip text but none is selected."
+  },
+  "statusNoImageUrl": {
+      "message": "未提供图片URL用于剪辑。",
+      "description": "Status message if image URL is missing for clipping."
+  },
+  "statusTimelineSaved": {
+    "message": "时间轴已保存！",
+    "description": "Status message shown when the timeline is successfully saved."
+  },
+  "statusAiPayloadLogged": {
+    "message": "AI脚本已记录到控制台。",
+    "description": "Status message shown when the AI payload is prepared and logged."
+  },
+  "statusTimelineEmpty": {
+    "message": "时间轴为空，请添加一些素材！",
+    "description": "Status message shown when trying to use an empty timeline."
+  },
+  "statusErrorLoadingClips": {
+    "message": "加载剪辑列表失败。",
+    "description": "Status message shown if there's an error loading clips from storage."
+  },
+  "statusErrorSavingClip": {
+    "message": "保存剪辑失败。",
+    "description": "Status message shown if there's an error saving a single clip."
+  },
+  "statusErrorDeletingClip": {
+    "message": "删除剪辑失败。",
+    "description": "Status message shown if there's an error deleting a clip."
+  },
+  "statusErrorLoadingTimeline": {
+    "message": "加载时间轴失败。",
+    "description": "Status message shown if there's an error loading the timeline from storage."
+  },
+  "statusErrorSavingTimeline": {
+    "message": "保存时间轴失败。",
+    "description": "Status message shown if there's an error saving the timeline to storage."
+  },
+  "statusErrorLoadingMediaBin": {
+    "message": "加载素材库失败。",
+    "description": "Status message for error loading media bin items."
+  },
+  "clipImageContextMenuLabel": {
+    "message": "剪辑图片",
+    "description": "Text for the context menu item to clip an image."
+  },
+  "noClipsYetMessage": {
+    "message": "暂无剪辑。请选择文本或右键点击图片进行剪辑！",
+    "description": "Message shown in the clips view when no clips are saved."
+  },
+  "mediaBinEmptyMessage": {
+    "message": "素材库为空。请先添加剪辑，或从“剪辑列表”选项卡中剪辑新内容。",
+    "description": "Message shown in media bin when empty."
+  },
+  "timelineEmptyMessage": {
+    "message": "时间轴为空。请从素材库拖拽项目至此。",
+    "description": "Message shown in timeline when empty."
+  },
+  "deleteButtonSymbol": {
+    "message": "X",
+    "description": "Symbol or text for delete buttons. 'X' is common."
+  },
+  "timelineItemDurationSuffix": {
+    "message": "秒",
+    "description": "Suffix for duration input, e.g., '5 s' for 5 seconds."
+  },
+  "statusClipDeleted": {
+    "message": "剪辑已删除。",
+    "description": "Status message shown when a clip is successfully deleted."
+  },
+  "popupTitle": {
+    "message": "扩展控制",
+    "description": "浏览器操作弹出窗口的标题。"
+  }
+}

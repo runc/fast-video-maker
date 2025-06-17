@@ -23,39 +23,39 @@ let statusMessageTimeout = null;
 
 
 // --- Status Message Function ---
-function showSidebarStatus(message, isError = false, duration = 3000) {
+function showSidebarStatus(messageKey, isError = false, duration = 3000, ...args) {
   const statusElement = document.getElementById(STATUS_MESSAGE_ID);
+  let message = chrome.i18n.getMessage(messageKey, ...args);
+  if (!message) { // Fallback if messageKey is not found
+      console.warn(`i18n key not found: ${messageKey}. Displaying key as message.`);
+      message = messageKey;
+  }
+
   if (!statusElement) {
-    console.warn("Status message element not found in sidebar.");
-    // Fallback to alert if status element isn't there for some reason
-    if (isError) console.error("Status (fallback alert):", message); else console.log("Status (fallback alert):", message);
-    alert(message);
+    console.warn("Status message element not found in sidebar. Fallback to console/alert.");
+    if (isError) console.error("Status:", message); else console.log("Status:", message);
+    // Avoid alert in final version if possible, but good for dev if element missing
+    // window.alert(message);
     return;
   }
 
   statusElement.textContent = message;
-  statusElement.style.backgroundColor = isError ? '#f8d7da' : '#d4edda'; // Bootstrap error/success colors
+  statusElement.style.backgroundColor = isError ? '#f8d7da' : '#d4edda';
   statusElement.style.color = isError ? '#721c24' : '#155724';
   statusElement.style.display = 'block';
 
-  if (statusMessageTimeout) {
-    clearTimeout(statusMessageTimeout);
-  }
-
-  if (duration > 0) { // Allow duration 0 to keep message until next one
-    statusMessageTimeout = setTimeout(() => {
-      statusElement.style.display = 'none';
-    }, duration);
+  if (statusMessageTimeout) clearTimeout(statusMessageTimeout);
+  if (duration > 0) {
+    statusMessageTimeout = setTimeout(() => { statusElement.style.display = 'none'; }, duration);
   }
 }
 
-
 // --- Edit Mode Functions ---
-function enableEditMode() { document.body.style.cursor = 'cell'; document.body.addEventListener('mouseover', handleMouseOver); document.body.addEventListener('mouseout', handleMouseOut); document.body.addEventListener('click', handleClickToMakeEditable, true); console.log("Edit mode enabled."); }
-function disableEditMode() { document.body.style.cursor = 'auto'; document.body.removeEventListener('mouseover', handleMouseOver); document.body.removeEventListener('mouseout', handleMouseOut); document.body.removeEventListener('click', handleClickToMakeEditable, true); if (currentlyEditableElement) { currentlyEditableElement.contentEditable = 'false'; currentlyEditableElement.style.border = ''; currentlyEditableElement.style.outline = ''; currentlyEditableElement = null; } document.querySelectorAll('[data-original-outline]').forEach(el => { el.style.outline = el.getAttribute('data-original-outline') || ''; el.removeAttribute('data-original-outline'); }); console.log("Edit mode disabled."); }
-function handleMouseOver(event) { if (!isEditModeEnabled || event.target === currentlyEditableElement || event.target === document.body || event.target.id === SIDEBAR_ID || event.target.closest(`#${SIDEBAR_ID}`)) return; originalOutline = event.target.style.outline || ''; event.target.setAttribute('data-original-outline', originalOutline); event.target.style.outline = '2px dashed blue'; }
-function handleMouseOut(event) { if (!isEditModeEnabled || event.target === currentlyEditableElement || event.target === document.body || event.target.id === SIDEBAR_ID || event.target.closest(`#${SIDEBAR_ID}`)) return; if (event.target.hasAttribute('data-original-outline')) { event.target.style.outline = event.target.getAttribute('data-original-outline'); event.target.removeAttribute('data-original-outline'); } else { event.target.style.outline = ''; } }
-function handleClickToMakeEditable(event) { if (!isEditModeEnabled || event.target === document.body || event.target.id === SIDEBAR_ID || event.target.closest(`#${SIDEBAR_ID}`)) return; event.preventDefault(); event.stopPropagation(); if (currentlyEditableElement && currentlyEditableElement !== event.target) { currentlyEditableElement.contentEditable = 'false'; currentlyEditableElement.style.border = ''; if (currentlyEditableElement.hasAttribute('data-original-outline')) { currentlyEditableElement.style.outline = currentlyEditableElement.getAttribute('data-original-outline'); currentlyEditableElement.removeAttribute('data-original-outline'); } } currentlyEditableElement = event.target; currentlyEditableElement.contentEditable = 'true'; currentlyEditableElement.style.border = '2px solid green'; currentlyEditableElement.style.outline = ''; if (currentlyEditableElement.hasAttribute('data-original-outline')) { currentlyEditableElement.removeAttribute('data-original-outline'); } console.log("Element made editable:", currentlyEditableElement); }
+function enableEditMode() { /* ... (unchanged) ... */ document.body.style.cursor = 'cell'; document.body.addEventListener('mouseover', handleMouseOver); document.body.addEventListener('mouseout', handleMouseOut); document.body.addEventListener('click', handleClickToMakeEditable, true); console.log("Edit mode enabled."); }
+function disableEditMode() { /* ... (unchanged) ... */ document.body.style.cursor = 'auto'; document.body.removeEventListener('mouseover', handleMouseOver); document.body.removeEventListener('mouseout', handleMouseOut); document.body.removeEventListener('click', handleClickToMakeEditable, true); if (currentlyEditableElement) { currentlyEditableElement.contentEditable = 'false'; currentlyEditableElement.style.border = ''; currentlyEditableElement.style.outline = ''; currentlyEditableElement = null; } document.querySelectorAll('[data-original-outline]').forEach(el => { el.style.outline = el.getAttribute('data-original-outline') || ''; el.removeAttribute('data-original-outline'); }); console.log("Edit mode disabled."); }
+function handleMouseOver(event) { /* ... (unchanged) ... */ if (!isEditModeEnabled || event.target === currentlyEditableElement || event.target === document.body || event.target.id === SIDEBAR_ID || event.target.closest(`#${SIDEBAR_ID}`)) return; originalOutline = event.target.style.outline || ''; event.target.setAttribute('data-original-outline', originalOutline); event.target.style.outline = '2px dashed blue'; }
+function handleMouseOut(event) { /* ... (unchanged) ... */ if (!isEditModeEnabled || event.target === currentlyEditableElement || event.target === document.body || event.target.id === SIDEBAR_ID || event.target.closest(`#${SIDEBAR_ID}`)) return; if (event.target.hasAttribute('data-original-outline')) { event.target.style.outline = event.target.getAttribute('data-original-outline'); event.target.removeAttribute('data-original-outline'); } else { event.target.style.outline = ''; } }
+function handleClickToMakeEditable(event) { /* ... (unchanged) ... */ if (!isEditModeEnabled || event.target === document.body || event.target.id === SIDEBAR_ID || event.target.closest(`#${SIDEBAR_ID}`)) return; event.preventDefault(); event.stopPropagation(); if (currentlyEditableElement && currentlyEditableElement !== event.target) { currentlyEditableElement.contentEditable = 'false'; currentlyEditableElement.style.border = ''; if (currentlyEditableElement.hasAttribute('data-original-outline')) { currentlyEditableElement.style.outline = currentlyEditableElement.getAttribute('data-original-outline'); currentlyEditableElement.removeAttribute('data-original-outline'); } } currentlyEditableElement = event.target; currentlyEditableElement.contentEditable = 'true'; currentlyEditableElement.style.border = '2px solid green'; currentlyEditableElement.style.outline = ''; if (currentlyEditableElement.hasAttribute('data-original-outline')) { currentlyEditableElement.removeAttribute('data-original-outline'); } console.log("Element made editable:", currentlyEditableElement); }
 
 // --- AI Payload Preparation ---
 function prepareAiPayload(timelineItems, intent) { /* ... (unchanged) ... */ const scenes = timelineItems.map(item => { if (item.type === 'text') { return { type: "text", content: item.content, duration: item.duration }; } else if (item.type === 'image') { const imageName = item.src.substring(item.src.lastIndexOf('/') + 1); return { type: "image", content: `![${imageName}](${item.src})`, duration: item.duration }; } return null; }).filter(item => item !== null); return { videoIntent: intent || "No specific intent provided.", scenes: scenes }; }
@@ -64,23 +64,20 @@ async function handleSendToAi() {
     await loadTimeline();
   }
   if (currentTimelineItems.length === 0) {
-    showSidebarStatus("Timeline is empty. Add some clips!", true);
+    showSidebarStatus('statusTimelineEmpty', true);
     return;
   }
   const intentInput = document.getElementById(AI_VIDEO_INTENT_ID);
   const videoIntent = intentInput ? intentInput.value.trim() : "";
   const payload = prepareAiPayload(currentTimelineItems, videoIntent);
   console.log("AI Video Generation Payload:", JSON.stringify(payload, null, 2));
-  showSidebarStatus("AI payload logged to console.", false);
+  showSidebarStatus('statusAiPayloadLogged', false);
 }
 
 // --- Sidebar Structure and Tabs ---
 function createSidebar() {
   let sidebar = document.getElementById(SIDEBAR_ID);
-  if (sidebar) {
-    setActiveTab(CLIPS_TAB_BUTTON_ID);
-    return sidebar;
-  }
+  if (sidebar) { /*setActiveTab(CLIPS_TAB_BUTTON_ID);*/ return sidebar; } // Avoid re-setting active tab if just getting ref
   sidebar = document.createElement('div');
   sidebar.id = SIDEBAR_ID;
   sidebar.style.cssText = `position:fixed; top:0; right:0; width:400px; height:100%; background-color:#f8f9fa; border-left:1px solid #ced4da; z-index:2147483647; overflow:hidden; box-sizing:border-box; transition:transform 0.3s ease-in-out; transform:translateX(100%); font-family:Arial,sans-serif; font-size:14px; color:#333; display:flex; flex-direction:column;`;
@@ -97,8 +94,8 @@ function createSidebar() {
     #${SIDEBAR_ID} .tab-button { flex-grow:1; padding:10px; background-color:transparent; border:none; border-right:1px solid #dee2e6; cursor:pointer; font-size:14px; }
     #${SIDEBAR_ID} .tab-button:last-child { border-right:none; }
     #${SIDEBAR_ID} .tab-button.active { background-color:#fff; color:#007bff; border-bottom:2px solid #007bff; font-weight:bold; }
-    #${SIDEBAR_ID} #${STATUS_MESSAGE_ID} { display:none; padding: 8px; margin: 0 0 10px 0; text-align:center; font-size: 13px; border-radius: 4px; }
-    #${SIDEBAR_ID} .sidebar-view-container { flex-grow:1; overflow-y:auto; padding: 0 15px 15px 15px; } /* Padding adjusted for status message */
+    #${SIDEBAR_ID} #${STATUS_MESSAGE_ID} { display:none; padding: 8px; margin: 0; /* Removed bottom margin */ text-align:center; font-size: 13px; border-radius: 0; /* Full width appearance */ border-bottom: 1px solid transparent; /* For color separation */ }
+    #${SIDEBAR_ID} .sidebar-view-container { flex-grow:1; overflow-y:auto; padding: 15px; } /* Standard padding for views */
     #${SIDEBAR_ID} .clip-item { position:relative; background-color:#fff; border:1px solid #dee2e6; border-radius:4px; padding:10px; margin-bottom:10px; box-shadow:0 1px 2px rgba(0,0,0,0.05); }
     #${SIDEBAR_ID} .clip-item p { white-space:pre-wrap; word-wrap:break-word; margin:0; }
     #${SIDEBAR_ID} .clip-item img { max-width:100%; height:auto; border-radius:3px; margin-top:5px; }
@@ -114,29 +111,39 @@ function createSidebar() {
     #${TIMELINE_AREA_ID} .timeline-clip .clip-info { flex-grow:1; }
     #${TIMELINE_AREA_ID} .timeline-clip .duration-input { width:50px; margin-left:10px; padding:3px; font-size:12px; border:1px solid #ccc; border-radius:3px; }
     #${TIMELINE_AREA_ID} .drop-indicator { height:2px; background-color:blue; margin:2px 0; }
-    #${EDITOR_VIEW_ID} .ai-controls { padding:10px; border-top:1px solid #dee2e6; margin-top:10px; background-color:#f9f9f9;}
+    #${EDITOR_VIEW_ID} .ai-controls { padding:10px; border-top:1px solid #dee2e6; margin-top:auto; /* Push to bottom */ background-color:#f9f9f9;}
     #${EDITOR_VIEW_ID} .ai-controls input[type="text"] { width: calc(100% - 16px); padding: 8px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;}
     #${EDITOR_VIEW_ID} .ai-controls button { width: 100%; padding: 10px; font-size: 14px;}
   `;
   sidebar.appendChild(styleTag);
 
   sidebar.innerHTML += `
-    <div class="sidebar-header"><h3>Web Clipper</h3><button id="closeSidebarBtnInternal" class="internal-btn">Close</button></div>
-    <div class="sidebar-tabs">
-      <button id="${CLIPS_TAB_BUTTON_ID}" class="tab-button">Clips</button>
-      <button id="${EDITOR_TAB_BUTTON_ID}" class="tab-button">Editor</button>
+    <div class="sidebar-header">
+      <h3 id="sidebarHeaderTitle">${chrome.i18n.getMessage("sidebarHeader") || "Web Clipper Pro"}</h3>
+      <button id="closeSidebarBtnInternal" class="internal-btn">${chrome.i18n.getMessage("closeButtonText") || "Close"}</button>
     </div>
-    <div id="${STATUS_MESSAGE_ID}"></div> <!-- Status message area -->
+    <div class="sidebar-tabs">
+      <button id="${CLIPS_TAB_BUTTON_ID}" class="tab-button">${chrome.i18n.getMessage("clipsTabButtonText") || "Clips"}</button>
+      <button id="${EDITOR_TAB_BUTTON_ID}" class="tab-button">${chrome.i18n.getMessage("editorTabButtonText") || "Editor"}</button>
+    </div>
+    <div id="${STATUS_MESSAGE_ID}"></div>
     <div class="sidebar-view-container">
-      <div id="${CLIPS_VIEW_ID}" style="display:none;"></div>
+      <div id="${CLIPS_VIEW_ID}" style="display:none;">
+        <h4 id="clipsViewHeaderTitle">${chrome.i18n.getMessage("clipsViewHeader") || "Clipped Content"}</h4>
+      </div>
       <div id="${EDITOR_VIEW_ID}" style="display:none;">
-        <div id="${MEDIA_BIN_AREA_ID}"><h4>Media Bin</h4></div>
+        <div id="${MEDIA_BIN_AREA_ID}">
+          <h4 id="mediaBinHeaderTitle">${chrome.i18n.getMessage("mediaBinHeader") || "Media Bin"}</h4>
+        </div>
         <div id="${TIMELINE_AREA_ID}">
-          <h4>Timeline <button id="saveTimelineBtn" class="internal-btn" style="font-size:10px; padding:3px 6px;">Save</button></h4>
+          <h4>
+            <span id="timelineHeaderTitle">${chrome.i18n.getMessage("timelineHeader") || "Timeline"}</span>
+            <button id="saveTimelineBtn" class="internal-btn" style="font-size:10px; padding:3px 6px;">${chrome.i18n.getMessage("saveTimelineButtonText") || "Save"}</button>
+          </h4>
         </div>
         <div class="ai-controls">
-          <input type="text" id="${AI_VIDEO_INTENT_ID}" placeholder="Optional: Video theme or style">
-          <button id="${SEND_TO_AI_BUTTON_ID}">Generate Video with AI</button>
+          <input type="text" id="${AI_VIDEO_INTENT_ID}" placeholder="${chrome.i18n.getMessage("aiVideoIntentPlaceholder") || "Video theme..."}">
+          <button id="${SEND_TO_AI_BUTTON_ID}">${chrome.i18n.getMessage("sendToAiButtonText") || "Generate with AI"}</button>
         </div>
       </div>
     </div>`;
@@ -146,18 +153,14 @@ function createSidebar() {
   sidebar.querySelector(`#${EDITOR_TAB_BUTTON_ID}`).addEventListener('click', () => setActiveTab(EDITOR_TAB_BUTTON_ID));
   sidebar.querySelector('#closeSidebarBtnInternal').addEventListener('click', () => toggleSidebarVisibility(sidebar, false));
 
-  const timelineArea = sidebar.querySelector(`#${TIMELINE_AREA_ID}`);
-  if(timelineArea) { // Check if editor view elements are there (might not be if sidebar is never opened to editor)
-    timelineArea.addEventListener('dragover', handleTimelineDragOver);
-    timelineArea.addEventListener('drop', handleDropOnTimelineContainer);
-    timelineArea.addEventListener('change', handleDurationChange);
-  }
+  // Event listeners for timelineArea are attached in setActiveTab when editor is shown for the first time
+  // to ensure the element exists.
 
-  setActiveTab(CLIPS_TAB_BUTTON_ID);
+  setActiveTab(CLIPS_TAB_BUTTON_ID); // Set default active tab
   return sidebar;
 }
 
-function setActiveTab(activeTabId) { /* ... (unchanged, but ensure save/AI buttons listeners are attached correctly) ... */
+function setActiveTab(activeTabId) {
   const clipsView = document.getElementById(CLIPS_VIEW_ID);
   const editorView = document.getElementById(EDITOR_VIEW_ID);
   const clipsTabBtn = document.getElementById(CLIPS_TAB_BUTTON_ID);
@@ -173,6 +176,13 @@ function setActiveTab(activeTabId) { /* ... (unchanged, but ensure save/AI butto
   if (activeTabId === CLIPS_TAB_BUTTON_ID) {
     renderClipsInSidebar();
   } else if (activeTabId === EDITOR_TAB_BUTTON_ID) {
+    const timelineArea = document.getElementById(TIMELINE_AREA_ID);
+    if(timelineArea && !timelineArea.dataset.listenerAttached){ // Attach timeline specific listeners only once
+        timelineArea.addEventListener('dragover', handleTimelineDragOver);
+        timelineArea.addEventListener('drop', handleDropOnTimelineContainer);
+        timelineArea.addEventListener('change', handleDurationChange);
+        timelineArea.dataset.listenerAttached = 'true';
+    }
     const saveBtn = document.getElementById('saveTimelineBtn');
     if(saveBtn && !saveBtn.dataset.listenerAttached) { saveBtn.addEventListener('click', saveTimeline); saveBtn.dataset.listenerAttached = 'true'; }
     const aiBtn = document.getElementById(SEND_TO_AI_BUTTON_ID);
@@ -187,10 +197,10 @@ async function saveTimeline() {
   try {
     await chrome.storage.local.set({ [STORAGE_KEY_VIDEO_TIMELINE]: currentTimelineItems });
     console.log("Timeline saved:", currentTimelineItems);
-    showSidebarStatus("Timeline saved successfully!", false);
+    showSidebarStatus('statusTimelineSaved', false);
   } catch (error) {
     console.error("Error saving timeline:", error);
-    showSidebarStatus("Error saving timeline.", true);
+    showSidebarStatus('statusErrorSavingTimeline', true);
   }
 }
 async function loadTimeline() {
@@ -201,45 +211,131 @@ async function loadTimeline() {
     console.log("Timeline loaded:", currentTimelineItems);
   } catch (error) {
     console.error("Error loading timeline:", error);
-    showSidebarStatus("Error loading timeline.", true);
+    showSidebarStatus('statusErrorLoadingTimeline', true);
     currentTimelineItems = [];
   }
-  renderTimeline(); // Always render, even if empty or errored
+  renderTimeline();
 }
 
 // --- Rendering Functions ---
 async function renderClipsInSidebar() {
     const displayArea = document.getElementById(CLIPS_VIEW_ID);
     if (!displayArea) { if(document.getElementById(SIDEBAR_ID)) setTimeout(renderClipsInSidebar, 100); return; }
-    displayArea.innerHTML = '';
+
+    const header = displayArea.querySelector('h4') || document.createElement('h4');
+    header.id = "clipsViewHeaderTitle"; // Ensure it has an ID if recreated
+    header.textContent = chrome.i18n.getMessage("clipsViewHeader") || "Clipped Content";
+    displayArea.innerHTML = ''; // Clear old content
+    displayArea.appendChild(header); // Add header back
+
     try {
         const result = await chrome.storage.local.get([STORAGE_KEY_CLIPPED_MATERIALS]);
         if(chrome.runtime.lastError) throw chrome.runtime.lastError;
         const clips = result[STORAGE_KEY_CLIPPED_MATERIALS] || [];
-        if (clips.length === 0) { displayArea.innerHTML = '<p>No clips yet. Select text or right-click an image to clip.</p>'; return; }
-        clips.forEach((clip, index) => { /* ... (unchanged) ... */ const el = document.createElement('div'); el.className = 'clip-item'; el.setAttribute('data-clip-index', index); if (clip.type === 'text') el.innerHTML = `<p>${clip.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>`; else if (clip.type === 'image') el.innerHTML = `<img src="${clip.src}" alt="Clipped Image">`; const delBtn = document.createElement('button'); delBtn.className='delete-clip-btn'; delBtn.textContent='X'; delBtn.title='Delete'; delBtn.onclick=handleDeleteClip; el.appendChild(delBtn); displayArea.appendChild(el); });
-    } catch(e){ console.error("Error rendering clips:",e); showSidebarStatus("Error loading clips.", true); displayArea.innerHTML='<p>Error loading clips.</p>';}
+        if (clips.length === 0) {
+            const p = document.createElement('p');
+            p.textContent = chrome.i18n.getMessage("noClipsYetMessage") || "No clips yet...";
+            displayArea.appendChild(p);
+            return;
+        }
+        clips.forEach((clip, index) => {
+            const el = document.createElement('div'); el.className = 'clip-item'; el.setAttribute('data-clip-index', index);
+            if (clip.type === 'text') el.innerHTML = `<p>${clip.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>`;
+            else if (clip.type === 'image') el.innerHTML = `<img src="${clip.src}" alt="Clipped Image">`;
+            const delBtn = document.createElement('button'); delBtn.className='delete-clip-btn';
+            delBtn.textContent = chrome.i18n.getMessage("deleteButtonSymbol") || "X";
+            delBtn.title = 'Delete this clip'; delBtn.onclick=handleDeleteClip;
+            el.appendChild(delBtn); displayArea.appendChild(el);
+        });
+    } catch(e){ console.error("Error rendering clips:",e); showSidebarStatus('statusErrorLoadingClips', true); displayArea.insertAdjacentHTML('beforeend', `<p>${chrome.i18n.getMessage('statusErrorLoadingClips')}</p>`);}
 }
 async function renderMediaBin() {
     const area = document.getElementById(MEDIA_BIN_AREA_ID);
     if (!area) { if(document.getElementById(EDITOR_VIEW_ID)) setTimeout(renderMediaBin, 100); return; }
-    const h4 = area.querySelector('h4'); area.innerHTML = ''; if(h4) area.appendChild(h4);
+
+    const header = area.querySelector('h4') || document.createElement('h4');
+    header.id = "mediaBinHeaderTitle";
+    header.textContent = chrome.i18n.getMessage("mediaBinHeader") || "Media Bin";
+    area.innerHTML = '';
+    area.appendChild(header);
+
     try {
         const result = await chrome.storage.local.get([STORAGE_KEY_CLIPPED_MATERIALS]);
         if(chrome.runtime.lastError) throw chrome.runtime.lastError;
         const clips = result[STORAGE_KEY_CLIPPED_MATERIALS] || [];
-        if (clips.length === 0) { area.insertAdjacentHTML('beforeend', '<p>Media bin empty. Add clips from the "Clips" tab or by clipping new content.</p>'); return; }
-        clips.forEach(clip => { /* ... (unchanged) ... */ const item = document.createElement('div'); item.className = 'media-item'; item.draggable = true; const clipInfo = { ...clip, id: clip.timestamp || `clip-${Date.now()}-${Math.random()}` }; item.setAttribute('data-clip-info', JSON.stringify(clipInfo)); if (clip.type === 'text') item.textContent = clip.content.substring(0,20) + '...'; else if (clip.type === 'image') item.innerHTML = `<img src="${clip.src}" alt="Media"> ${clip.src.substring(clip.src.lastIndexOf('/')+1).substring(0,15)}...`; item.ondragstart = (e) => { e.dataTransfer.setData('application/json', JSON.stringify({ clipData: clipInfo, source: 'mediaBin' })); e.dataTransfer.effectAllowed = 'copy'; }; area.appendChild(item); });
-    } catch(e){ console.error("Error rendering media bin:",e); showSidebarStatus("Error loading media bin.", true); area.insertAdjacentHTML('beforeend','<p>Error loading media.</p>');}
+        if (clips.length === 0) {
+            const p = document.createElement('p');
+            p.textContent = chrome.i18n.getMessage("mediaBinEmptyMessage") || "Media bin empty.";
+            area.appendChild(p);
+            return;
+        }
+        clips.forEach(clip => {
+            const item = document.createElement('div'); item.className = 'media-item'; item.draggable = true;
+            const clipInfo = { ...clip, id: clip.timestamp || `clip-${Date.now()}-${Math.random()}` };
+            item.setAttribute('data-clip-info', JSON.stringify(clipInfo));
+            if (clip.type === 'text') item.textContent = clip.content.substring(0,20) + '...';
+            else if (clip.type === 'image') item.innerHTML = `<img src="${clip.src}" alt="Media"> ${clip.src.substring(clip.src.lastIndexOf('/')+1).substring(0,15)}...`;
+            item.ondragstart = (e) => { e.dataTransfer.setData('application/json', JSON.stringify({ clipData: clipInfo, source: 'mediaBin' })); e.dataTransfer.effectAllowed = 'copy'; };
+            area.appendChild(item);
+        });
+    } catch(e){ console.error("Error rendering media bin:",e); showSidebarStatus('statusErrorLoadingMediaBin', true); area.insertAdjacentHTML('beforeend', `<p>${chrome.i18n.getMessage('statusErrorLoadingMediaBin')}</p>`);}
 }
-function renderTimeline() { /* ... (unchanged, ensure header is preserved) ... */   const timelineArea = document.getElementById(TIMELINE_AREA_ID); const header = timelineArea.querySelector('h4'); timelineArea.innerHTML = ''; if (header) timelineArea.appendChild(header); if (currentTimelineItems.length === 0) { timelineArea.insertAdjacentHTML('beforeend', '<p>Timeline is empty. Drag items from Media Bin.</p>'); } currentTimelineItems.forEach((item, index) => { const el = document.createElement('div'); el.className = 'timeline-clip'; el.draggable = true; el.setAttribute('data-timeline-item-id', item.timelineItemId); el.setAttribute('data-index', index); let contentPreview = ''; if (item.type === 'text') contentPreview = `<span>Text: ${item.content.substring(0, 15)}...</span>`; else if (item.type === 'image') contentPreview = `<img src="${item.src}" alt="Timeline item">`; el.innerHTML = `<span class="clip-info">${contentPreview}</span><input type="number" class="duration-input" value="${item.duration}" data-timeline-item-id="${item.timelineItemId}" min="1" step="0.1"> s`; el.addEventListener('dragstart', handleTimelineItemDragStart); el.addEventListener('dragover', handleTimelineDragOver); el.addEventListener('drop', handleDropOnTimelineItem); timelineArea.appendChild(el); }); }
+function renderTimeline() {
+  const timelineArea = document.getElementById(TIMELINE_AREA_ID);
+  const headerContainer = timelineArea.querySelector('h4'); // The H4 element that contains title and save button
+  const timelineTitleSpan = document.getElementById('timelineHeaderTitle') || document.createElement('span');
+  const saveTimelineBtn = document.getElementById('saveTimelineBtn');
+
+  timelineTitleSpan.id = 'timelineHeaderTitle';
+  timelineTitleSpan.textContent = chrome.i18n.getMessage("timelineHeader") || "Timeline";
+
+  // Clear only items, keep header structure
+  while(headerContainer && headerContainer.nextSibling){
+    timelineArea.removeChild(headerContainer.nextSibling);
+  }
+  if(!headerContainer && timelineArea.firstChild) { // If header was somehow removed, clear all
+      timelineArea.innerHTML = '';
+      // Recreate header if totally gone
+      const newHeader = document.createElement('h4');
+      newHeader.appendChild(timelineTitleSpan);
+      if(saveTimelineBtn) newHeader.appendChild(saveTimelineBtn); else {
+          const newSaveBtn = document.createElement('button');
+          newSaveBtn.id = 'saveTimelineBtn';
+          newSaveBtn.className='internal-btn';
+          newSaveBtn.style.cssText='font-size:10px; padding:3px 6px;';
+          newSaveBtn.textContent = chrome.i18n.getMessage("saveTimelineButtonText") || "Save";
+          if(!newSaveBtn.dataset.listenerAttached){newSaveBtn.addEventListener('click', saveTimeline); newSaveBtn.dataset.listenerAttached = 'true';}
+          newHeader.appendChild(newSaveBtn);
+      }
+      timelineArea.insertBefore(newHeader, timelineArea.firstChild);
+  }
+
+
+  if (currentTimelineItems.length === 0) {
+    const p = document.createElement('p');
+    p.textContent = chrome.i18n.getMessage("timelineEmptyMessage") || "Timeline empty.";
+    timelineArea.appendChild(p);
+  }
+  currentTimelineItems.forEach((item, index) => {
+    const el = document.createElement('div'); el.className = 'timeline-clip'; el.draggable = true;
+    el.setAttribute('data-timeline-item-id', item.timelineItemId); el.setAttribute('data-index', index);
+    let contentPreview = '';
+    if (item.type === 'text') contentPreview = `<span>Text: ${item.content.substring(0, 15)}...</span>`;
+    else if (item.type === 'image') contentPreview = `<img src="${item.src}" alt="Timeline item">`;
+    el.innerHTML = `<span class="clip-info">${contentPreview}</span><input type="number" class="duration-input" value="${item.duration}" data-timeline-item-id="${item.timelineItemId}" min="1" step="0.1"> ${chrome.i18n.getMessage("timelineItemDurationSuffix") || "s"}`;
+    el.addEventListener('dragstart', handleTimelineItemDragStart);
+    el.addEventListener('dragover', handleTimelineDragOver);
+    el.addEventListener('drop', handleDropOnTimelineItem);
+    timelineArea.appendChild(el);
+  });
+}
 
 // --- Drag and Drop Handlers ---
 function handleMediaDragStart(event) { /* ... (unchanged) ... */ const clipInfoString = event.target.getAttribute('data-clip-info'); const parsedClipInfo = JSON.parse(clipInfoString); event.dataTransfer.setData('application/json', JSON.stringify({ clipData: parsedClipInfo, source: 'mediaBin' })); event.dataTransfer.effectAllowed = 'copy';}
 function handleTimelineItemDragStart(event) { /* ... (unchanged) ... */ event.stopPropagation(); const timelineItemId = event.target.getAttribute('data-timeline-item-id'); const originalIndex = parseInt(event.target.getAttribute('data-index'), 10); event.dataTransfer.setData('application/json', JSON.stringify({ timelineItemId, originalIndex, source: 'timeline' })); event.dataTransfer.effectAllowed = 'move';}
 let dropIndicator = null;
 function ensureDropIndicator() { if (!dropIndicator) { dropIndicator = document.createElement('div'); dropIndicator.className = 'drop-indicator'; } return dropIndicator; }
-function handleTimelineDragOver(event) { /* ... (unchanged) ... */ event.preventDefault(); event.dataTransfer.dropEffect = 'move'; const timelineArea = document.getElementById(TIMELINE_AREA_ID); const indicator = ensureDropIndicator(); const targetElement = event.target.closest('.timeline-clip'); if (targetElement) { const rect = targetElement.getBoundingClientRect(); const isAfter = event.clientY > rect.top + rect.height / 2; if (isAfter) targetElement.parentNode.insertBefore(indicator, targetElement.nextSibling); else targetElement.parentNode.insertBefore(indicator, targetElement); } else { const headerH4 = timelineArea.querySelector('h4'); if (headerH4 && headerH4.nextSibling) timelineArea.insertBefore(indicator, headerH4.nextSibling); else timelineArea.appendChild(indicator);}}
+function handleTimelineDragOver(event) { /* ... (unchanged, check for headerH4.nextSibling before inserting indicator) ... */ event.preventDefault(); event.dataTransfer.dropEffect = 'move'; const timelineArea = document.getElementById(TIMELINE_AREA_ID); const indicator = ensureDropIndicator(); const targetElement = event.target.closest('.timeline-clip'); if (targetElement) { const rect = targetElement.getBoundingClientRect(); const isAfter = event.clientY > rect.top + rect.height / 2; if (isAfter) targetElement.parentNode.insertBefore(indicator, targetElement.nextSibling); else targetElement.parentNode.insertBefore(indicator, targetElement); } else { const headerH4 = timelineArea.querySelector('h4'); if (headerH4 && headerH4.nextSibling) timelineArea.insertBefore(indicator, headerH4.nextSibling); else if (headerH4) timelineArea.appendChild(indicator); /*append after header if no other elements*/ else timelineArea.insertBefore(indicator, timelineArea.firstChild); /* or at the very top if no header */}}
 function handleDropOnTimelineContainer(event) { /* ... (unchanged) ... */ event.preventDefault(); const indicator = ensureDropIndicator(); if(indicator.parentNode) indicator.parentNode.removeChild(indicator); const dataString = event.dataTransfer.getData('application/json'); if (!dataString) return; const draggedData = JSON.parse(dataString); if (draggedData.source === 'mediaBin') { const clip = draggedData.clipData; const newItem = { ...clip, duration: clip.type === 'image' ? 3 : 5, timelineItemId: `${clip.id}_${Date.now()}` }; currentTimelineItems.push(newItem); } else if (draggedData.source === 'timeline') { const itemToMove = currentTimelineItems.splice(draggedData.originalIndex, 1)[0]; if(itemToMove) currentTimelineItems.push(itemToMove); } saveTimeline().then(renderTimeline); }
 function handleDropOnTimelineItem(event) { /* ... (unchanged) ... */ event.preventDefault(); event.stopPropagation(); const indicator = ensureDropIndicator(); if(indicator.parentNode) indicator.parentNode.removeChild(indicator); const dataString = event.dataTransfer.getData('application/json'); if (!dataString) return; const draggedData = JSON.parse(dataString); const targetElement = event.target.closest('.timeline-clip'); const targetIndex = targetElement ? parseInt(targetElement.getAttribute('data-index'), 10) : currentTimelineItems.length -1; if (draggedData.source === 'mediaBin') { const clip = draggedData.clipData; const newItem = { ...clip, duration: clip.type === 'image' ? 3 : 5, timelineItemId: `${clip.id}_${Date.now()}`}; currentTimelineItems.splice(targetIndex, 0, newItem); } else if (draggedData.source === 'timeline') { if (draggedData.originalIndex === targetIndex) return; const itemToMove = currentTimelineItems.splice(draggedData.originalIndex, 1)[0]; if(itemToMove) currentTimelineItems.splice(targetIndex, 0, itemToMove); } saveTimeline().then(renderTimeline); }
 
@@ -256,13 +352,13 @@ async function handleDeleteClip(event) {
             clips.splice(indexToDelete, 1);
             await chrome.storage.local.set({[STORAGE_KEY_CLIPPED_MATERIALS]: clips});
             if(chrome.runtime.lastError) throw chrome.runtime.lastError;
-            showSidebarStatus("Clip deleted.", false, 2000);
+            showSidebarStatus("statusClipDeleted", false, 2000); // Assuming 'statusClipDeleted' is a new key
             renderClipsInSidebar();
             if (document.getElementById(EDITOR_TAB_BUTTON_ID)?.classList.contains('active')) {
                 renderMediaBin();
             }
         }
-    } catch (e) { console.error("Error deleting clip:", e); showSidebarStatus("Error deleting clip.", true); }
+    } catch (e) { console.error("Error deleting clip:", e); showSidebarStatus('statusErrorDeletingClip', true); }
 }
 
 // --- Sidebar Visibility & Message Listener ---
@@ -274,18 +370,18 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     const isTextClip = request.action === "clipSelection";
     const contentToClip = isTextClip ? window.getSelection().toString().trim() : request.imageUrl;
     if (!contentToClip) {
-      showSidebarStatus(isTextClip ? "No text selected to clip." : "No image URL provided.", true);
+      showSidebarStatus(isTextClip ? 'statusNoTextSelected' : 'statusNoImageUrl', true);
       sendResponse({status: `No ${isTextClip ? 'text selected' : 'image URL'}`});
       return true;
     }
     const newClip = { type: isTextClip ? 'text' : 'image', [isTextClip ? 'content' : 'src']: contentToClip, timestamp: new Date().toISOString() };
     chrome.storage.local.get([STORAGE_KEY_CLIPPED_MATERIALS], function(result) {
-      if (chrome.runtime.lastError) { console.error("Error getting clips for saving:", chrome.runtime.lastError); showSidebarStatus("Error preparing to save clip.", true); sendResponse({status:"Error storage get"}); return;}
+      if (chrome.runtime.lastError) { console.error("Error getting clips for saving:", chrome.runtime.lastError); showSidebarStatus('statusErrorSavingClip', true); sendResponse({status:"Error storage get"}); return;}
       const clips = result[STORAGE_KEY_CLIPPED_MATERIALS] || []; clips.push(newClip);
       chrome.storage.local.set({[STORAGE_KEY_CLIPPED_MATERIALS]: clips}, function() {
-        if (chrome.runtime.lastError) { console.error("Error saving clip:", chrome.runtime.lastError); showSidebarStatus("Error saving clip.", true); sendResponse({status: "Error saving clip"});
+        if (chrome.runtime.lastError) { console.error("Error saving clip:", chrome.runtime.lastError); showSidebarStatus('statusErrorSavingClip', true); sendResponse({status: "Error saving clip"});
         } else {
-          console.log("Clip saved:", newClip); showSidebarStatus(isTextClip ? "Text clipped!" : "Image clipped!", false);
+          console.log("Clip saved:", newClip); showSidebarStatus(isTextClip ? 'statusTextClipped' : 'statusImageClipped', false);
           if (isSidebarOpen) { if (document.getElementById(CLIPS_TAB_BUTTON_ID)?.classList.contains('active')) renderClipsInSidebar(); if (document.getElementById(EDITOR_TAB_BUTTON_ID)?.classList.contains('active')) renderMediaBin(); }
           sendResponse({status: "Clip saved successfully"});
         }
